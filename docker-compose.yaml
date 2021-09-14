@@ -64,9 +64,9 @@ services:
       - metric
     volumes:
       - grafana/datasources:/etc/grafana/provisioning/datasources/
-      - grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
       - grafana/dashboards:/etc/grafana/dashboards/
-      - grafana/grafana.ini:/etc/grafana/grafana.ini
+      - grafana.ini:/etc/grafana/grafana.ini
       - tls:/etc/grafana/tls/
     environment:
       - GF_SECURITY_ADMIN_USER=admin

@@ -1,0 +1,32 @@
+groups:
+- name: container down
+  rules:
+  - alert: container down
+    expr: up{job="container down"} == 0
+    for: 30s
+    labels:
+      service: container-status
+      severity: warning
+    annotations:
+      summary: docker container down {{ $labels.instance }} for user {{ $labels.user }}
+      description: "{{ $labels.user }}"
+
+  - alert: goodbye new user
+    expr: (changes(up{job="prometheus",instance!="localhost:9090"}[5m])>0) and (up{instance!="localhost:9090",job="prometheus"}==0)
+    for: 30s
+    labels:
+      service: mailing
+      severity: warning
+    annotations:
+      summary: prometheus service is down for user {{ $labels.user }}
+      description: "{{ $labels.user }}"
+
+  - alert: hello new user
+    expr: (changes(up{job="prometheus",instance!="localhost:9090"}[5m])>0) and (up{instance!="localhost:9090",job="prometheus"}==1)
+    for: 30s
+    labels:
+      service: upserver
+      severity: info
+    annotations:
+      summary: prometheus service is up for user {{ $labels.user }}
+      description: "{{ $labels.user }}"

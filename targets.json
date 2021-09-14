@@ -1,0 +1,10 @@
+[
+    {
+        "targets": [
+            "test.com:9090"
+        ],
+        "labels": {
+            "name": "test"
+        }
+    }
+ ]

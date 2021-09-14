@@ -1,0 +1,53 @@
+global:
+  smtp_smarthost: 'mail:205'
+  smtp_from: ''
+  smtp_auth_username: ''
+  smtp_auth_password: ''
+  smtp_require_tls: false
+
+templates:
+- '/etc/alertmanager/template/*.tmpl'
+
+route:
+  receiver: 'container-status'
+  group_by: ['alertname', 'cluster']
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 20m
+  routes:
+  - match_re:
+      service: (container-status)
+    receiver: container-status
+  - match_re:
+      service: (mailing)
+    receiver: container-status
+  - match_re:
+      service: (upserver)
+    receiver: container-status
+
+receivers:
+- name: 'container-status'
+  webhook_configs:
+    - url: HOOK_ADDRESS_HERE
+      send_resolved: true
+      max_alerts: 1
+     # http_config:
+     #   bearer_token: "BEARER_TOKEN_HERE"
+
+- name: 'mailing'
+  email_configs:
+  - to: ''
+    headers:
+      subject: "prometheus server down"
+  - to: ''
+    headers:
+      subject: "prometheus server down"
+
+- name: 'upserver'
+  email_configs:
+  - to: ''
+    headers:
+      subject: "prometheus server up"
+  - to: ''
+    headers:
+      subject: "prometheus server up"
